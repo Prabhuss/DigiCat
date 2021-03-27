@@ -1,0 +1,679 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage
+    x:Class="PyConsumerApp.Views.Detail.DetailPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+    xmlns:behavior="clr-namespace:PyConsumerApp.Behaviors.Catalog"
+    xmlns:rotator="clr-namespace:Syncfusion.SfRotator.XForms;assembly=Syncfusion.SfRotator.XForms"
+    xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+    xmlns:controls="clr-namespace:PyConsumerApp.Controls"
+    xmlns:converter="clr-namespace:PyConsumerApp.Converters"
+    xmlns:helper="clr-namespace:PyConsumerApp.Helpers"
+    xmlns:local="clr-namespace:PyConsumerApp.Views.Detail"
+    xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms"
+	xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core" 
+	ios:Page.UseSafeArea="true"
+    x:Name="detailPage"
+    Title="Detail page"
+    NavigationPage.HasNavigationBar="False"
+    Style="{StaticResource ContentPageStyle}"
+    BackgroundColor="White">
+    <!--xmlns:rotator="clr-namespace:Syncfusion.SfRotator.XForms;assembly=Syncfusion.SfRotator.XForms"-->
+
+    <ContentPage.Behaviors>
+        <behavior:CartBehavior />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converter:MRPtoBoolConverter x:Key="MRPtoBoolConverterKey" />
+            <DataTemplate x:Key="PortraitTemplate">
+                <Image
+                    Margin="3"
+                    Aspect="{OnIdiom Default=AspectFill,
+                                     Tablet=AspectFit}"
+                    BackgroundColor="{DynamicResource Gray-200}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Image.Source>
+                        <UriImageSource
+                            CacheValidity="14"
+                            CachingEnabled="true"
+                            Uri="{Binding Image}" />
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
+
+            <DataTemplate x:Key="LandscapeTemplate">
+                <Image
+                    Margin="3"
+                    Aspect="AspectFill"
+                    BackgroundColor="{DynamicResource Gray-200}"
+                    HeightRequest="350"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Image.Source>
+                        <UriImageSource
+                            CacheValidity="14"
+                            CachingEnabled="true"
+                            Uri="{Binding Image}" />
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
+
+            <ControlTemplate x:Key="DefaultTemplate">
+                <ScrollView>
+                    <ContentPresenter />
+                </ScrollView>
+            </ControlTemplate>
+
+            <converter:BooleanToColorConverter x:Key="BoolToColorConverter" />
+            <converter:BooleanToStringConverter x:Key="BoolToStringConverter" />
+            <converter:VisibilityConverter x:Key="VisibilityConverter" />
+            <converter:IntToThicknessConverter x:Key="intToThicknessConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ControlTemplate>
+        <ControlTemplate>
+            <StackLayout Spacing="0">
+
+                <!--  Title View  -->
+                <controls:TitleView Title="Product">
+                    <controls:TitleView.LeadingView>
+                        <buttons:SfButton
+                            x:Name="backButton"
+                            Command="{Binding Path=BindingContext.BackButtonCommand, Source={x:Reference detailPage}}"
+                            CommandParameter="{x:Reference backButton}"
+                            CornerRadius="4"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{StaticResource Back}" />
+                    </controls:TitleView.LeadingView>
+
+                    <controls:TitleView.TrailingView>
+                        <StackLayout>
+                            
+                        </StackLayout>
+                    </controls:TitleView.TrailingView>
+                </controls:TitleView>
+
+                <ContentPresenter />
+
+            </StackLayout>
+        </ControlTemplate>
+    </ContentPage.ControlTemplate>
+
+
+    <ContentPage.Content>
+        <ContentView ControlTemplate="{StaticResource DefaultTemplate}">
+            <Grid
+                Margin="{OnIdiom Default=0,
+                                 Desktop='24,24,24,0'}"
+                Padding="{OnIdiom Default=0,
+                                  Desktop=16}"
+                BackgroundColor="{OnIdiom Desktop={DynamicResource Gray-White},
+                                          Converter={StaticResource DynamicResourceToColorConverter}}"
+                ColumnSpacing="{OnIdiom Default=0,
+                                        Desktop=16}"
+                RowSpacing="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{OnIdiom Phone=400, Tablet=500, Desktop=*}" />
+                    <RowDefinition Height="{OnIdiom Default=*, Desktop=0}" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{OnIdiom Desktop=0.4*, Default=*}" />
+                    <ColumnDefinition Width="{OnIdiom Desktop=0.6*, Default=0}" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Product images  -->
+                <Image
+                        Margin="8,0,16,0"
+                        Aspect="Fill"
+                        BackgroundColor="{DynamicResource Gray-F0}"
+                        HeightRequest="{OnIdiom Default=150,
+                                                Desktop=120}"
+                        WidthRequest="{OnIdiom Default=140,
+                                               Desktop=200}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ImageTappedCommand}" CommandParameter="{Binding ProductDetail.PreviewImage}"/>
+                    </Image.GestureRecognizers>
+                    <Image.Source>
+                        <UriImageSource
+                    CacheValidity="14"
+                    CachingEnabled="true"
+                    Uri="{Binding ProductDetail.PreviewImage}" />
+                    </Image.Source>
+                </Image>
+                <!--rotator:SfRotator
+                    x:Name="Rotator"
+                    BackgroundColor="{OnIdiom Default={DynamicResource Gray-White},
+                                              Tablet={DynamicResource Gray-100},
+                                              Converter={StaticResource DynamicResourceToColorConverter}}"
+                    DotPlacement="OutSide"
+                    DotsBorderColor="Transparent"
+                    EnableLooping="False"
+                    HorizontalOptions="Center"
+                    ItemTemplate="{StaticResource PortraitTemplate}"
+                    ItemsSource="{Binding ProductDetail.PreviewImages}"
+                    NavigationStripMode="Dots"
+                    SelectedDotColor="{DynamicResource PrimaryColor}"
+                    UnselectedDotColor="{DynamicResource Gray-200}"
+                    VerticalOptions="Start" /-->
+
+                <ContentView
+                    Grid.Row="{OnIdiom Default=1,
+                                       Desktop=0}"
+                    Grid.Column="{OnIdiom Default=0,
+                                          Desktop=1}"
+                    ControlTemplate="{OnIdiom Desktop={StaticResource DesktopDetailTemplate}}">
+                    <Grid
+                        BackgroundColor="{DynamicResource Gray-White}"
+                        ColumnSpacing="0"
+                        RowSpacing="0">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+
+                        <!--  Product Name  -->
+                        <StackLayout Orientation="Horizontal" 
+                            Margin="15">
+                            <Label
+                            Grid.Row="0"
+                            MaxLines="3"
+                            FontFamily="{StaticResource Montserrat-SemiBold}"
+                            FontSize="16"
+                            HorizontalOptions="StartAndExpand"
+                            LineBreakMode="TailTruncation"
+                            LineHeight="{OnPlatform Android=1.5,
+                                                    iOS=1.25}"
+                            Style="{StaticResource LabelStyle}"
+                            Text="{Binding ProductDetail.productName}"
+                            TextColor="{DynamicResource Gray-900}"/>
+
+                            <Button 
+                        helper:RTLHelper.Margin="{OnIdiom Default='44,0,16,0',Phone='8,0,0,0'}"
+                        Command="{Binding RedirectToEditProductPageCommand}"
+                        CommandParameter="{Binding .}"
+                        CornerRadius="4"
+                        HeightRequest="32"
+                        Padding="3"
+                        TextColor="White"
+                        WidthRequest="100"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Text="Update"
+                        BackgroundColor="Green" />
+                        </StackLayout>
+
+                        <BoxView
+                            Grid.Row="1"
+                            Margin="0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+
+                        <StackLayout
+                            Grid.Row="2"
+                            Margin="20">
+                            
+                            
+                            <!-- MRP and Selling Price Grid -->
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!--MRP Grid-->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                    Grid.Row="0"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    FontFamily="{StaticResource Montserrat-SemiBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="MRP:    " TextColor="{DynamicResource HyperLink}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label
+                                    Grid.Column="1"
+                                        HorizontalOptions="End"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    FontFamily="{StaticResource Montserrat-Medium}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding ProductDetail.mrp}" TextColor="Black"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+
+                                <!-- Selling Price Grid-->
+                                <Grid Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Selling  Price:" TextColor="{DynamicResource HyperLink}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-Medium}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding ProductDetail.SellingPrice}" TextColor="Black"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Grid>
+                            <!-- Discount & % Grid -->
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!--Discount Grid-->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label
+                                    Grid.Row="0"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    FontFamily="{StaticResource Montserrat-SemiBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Discount:    " TextColor="{DynamicResource HyperLink}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label
+                                    Grid.Column="1"
+                                    FontAttributes="Bold"
+                                        HorizontalOptions="End"
+                                    FontSize="16"
+                                    FontFamily="{StaticResource Montserrat-Medium}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding ProductDetail.DiscountPrice}" TextColor="Black"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+
+                                <!-- Discunt % Grid-->
+                                <Grid Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Discount %:     " TextColor="{DynamicResource HyperLink}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label
+                                        HorizontalOptions="End"
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-Medium}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding ProductDetail.DiscountPercent, StringFormat='{0:0.00}%'}" TextColor="Black"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Grid>
+                            <!-- Gst & CESS Grid -->
+                            <Grid ColumnSpacing="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!--GST Grid-->
+                                <Grid >
+                                    <Label
+                                    Grid.Row="0"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    FontFamily="{StaticResource Montserrat-SemiBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="GST:" TextColor="{DynamicResource HyperLink}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label
+                                    Grid.Column="1"
+                                        HorizontalOptions="End"
+                                    FontAttributes="Bold"
+                                    FontSize="16"
+                                    FontFamily="{StaticResource Montserrat-Medium}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding ProductDetail.GST}" TextColor="Black"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+
+                                <!-- CESS Grid-->
+                                <Grid Grid.Column="1">
+                                    <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="CESS:" TextColor="{DynamicResource HyperLink}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                    <Label
+                                        Grid.Column="1"
+                                        HorizontalOptions="End"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        FontFamily="{StaticResource Montserrat-Medium}">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="{Binding ProductDetail.CESS}" TextColor="Black"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Grid>
+
+
+                        </StackLayout>
+
+                        <BoxView
+                            Grid.Row="3"
+                            HeightRequest="{OnIdiom Tablet=24,
+                                                    Desktop=8,
+                                                    Phone=16}"
+                            Style="{StaticResource BoxViewStyle}"
+                            Color="{OnIdiom Default={DynamicResource Gray-100},
+                                            Desktop={DynamicResource Gray-White},
+                                            Converter={StaticResource DynamicResourceToColorConverter}}" />
+
+
+                        <!--  Product Description  -->
+                        <StackLayout Grid.Row="4" Margin="15">
+                            <Label
+                            FontFamily="{StaticResource Montserrat-SemiBold}"
+                            FontSize="16"
+                            Style="{StaticResource LabelStyle}"
+                            Text="Product Description"
+                            VerticalOptions="Start" />
+
+                            <Label
+                            FontFamily="{DynamicResource Montserrat-Medium}"
+                            FontSize="14"
+                            LineHeight="{OnPlatform Default=1.25}"
+                            Style="{StaticResource LabelStyle}"
+                            Text="{Binding ProductDetail.productDesc}" />
+
+                        </StackLayout>
+                        
+                        <BoxView
+                            Grid.Row="5"
+                            HeightRequest="{OnIdiom Tablet=24,
+                                                    Default=16}"
+                            Style="{StaticResource BoxViewStyle}"
+                            Color="{OnIdiom Default={DynamicResource Gray-100},
+                                            Desktop={DynamicResource Gray-White},
+                                            Converter={StaticResource DynamicResourceToColorConverter}}" />
+
+                        <StackLayout Grid.Row="6" Margin="15">
+                            <Label 
+                                Text="Product Details:"
+                                FontSize="16"
+                                FontFamily="{StaticResource Montserrat-SemiBold}"/>
+
+                            <!-- Product ID grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="Product ID :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.ProductIdId}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+                            <!-- Barcode grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="Product Barcode :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.QuantityList}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+                            <!-- Category grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="Category :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.Category}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+                            <!-- UOM grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="UOM :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.UOM}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+                            <!-- IS Available grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="Is Available? :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.Availability_Status}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+
+
+                            <!-- IS Visible grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="Is Visible? :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.Visibility_Status}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+
+
+                            <!-- IS Deleted grid-->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="Is Deleted? :"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="{DynamicResource HyperLink}"/>
+                                <Label
+                                        Grid.Column="1"
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                    Text="{Binding ProductDetail.IsDelete}"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        TextColor="Black"/>
+                            </Grid>
+
+
+                        </StackLayout>
+
+                        <BoxView
+                            Grid.Row="7"
+                            HeightRequest="50"
+                            Style="{StaticResource BoxViewStyle}"
+                            Color="White"/>
+                    </Grid>
+                </ContentView>
+                <ActivityIndicator 
+                    Grid.Row="{OnIdiom Default=1,
+                                       Desktop=0}"
+                    Grid.Column="{OnIdiom Default=0,
+                                          Desktop=1}"
+                    IsRunning="{Binding IsBusy}" VerticalOptions="Start" HorizontalOptions="Center" Color="#b51700" />
+
+            </Grid>
+        </ContentView>
+    </ContentPage.Content>
+
+</ContentPage>
+<!--?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="PyConsumerApp.Views.Detail.DetailPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Welcome to Xamarin.Forms!"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage-->

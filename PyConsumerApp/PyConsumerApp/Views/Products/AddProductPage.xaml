@@ -1,0 +1,776 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+            xmlns:controls="clr-namespace:PyConsumerApp.Controls"
+            xmlns:viewModel="clr-namespace:PyConsumerApp.ViewModels.Transaction"
+            xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+            xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+            xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+            mc:Ignorable="d"
+            NavigationPage.HasNavigationBar="False"
+            x:Name="addProductPage"
+            x:Class="PyConsumerApp.Views.Products.AddProductPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary Source="Styles.xaml" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ControlTemplate>
+        <ControlTemplate>
+            <StackLayout Spacing="0" BackgroundColor="White">
+                <controls:TitleView Title="{TemplateBinding BindingContext.PageTitle}"  BackgroundColor="{DynamicResource Gray-White} ">
+                    <controls:TitleView.LeadingView>
+                        <buttons:SfButton
+                            x:Name="backButton"
+                            IsVisible="{TemplateBinding BindingContext.DisplayBackButton}"
+                            Command="{TemplateBinding BindingContext.BackButtonCommand}"
+                            CommandParameter="{x:Reference backButton}"
+                            CornerRadius="4"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{StaticResource Back}" />
+                    </controls:TitleView.LeadingView>
+                    
+                    <controls:TitleView.TrailingView>
+                        <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                            <Frame Grid.Column="1"  HorizontalOptions="End" VerticalOptions="Center" CornerRadius="8" BackgroundColor="White" Padding="5,0" Margin="0">
+                                <buttons:SfButton 
+                            Command="{Binding  BindingContext.MenuButtonCommand, Source={x:Reference addProductPage}}"
+                            CornerRadius="4"
+                            FontFamily="{StaticResource FontIcons}"
+                            FontSize="25"
+                            TextColor="{DynamicResource PrimaryColor}"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="&#xE72E;"  />
+                            </Frame>
+                        </StackLayout>
+                    </controls:TitleView.TrailingView>
+                </controls:TitleView>
+                <ContentPresenter />
+            </StackLayout>
+        </ControlTemplate>
+    </ContentPage.ControlTemplate>
+
+
+    <ContentPage.Content>
+        <ScrollView>
+            <Grid>
+                <StackLayout Grid.Row="0" BackgroundColor="{DynamicResource Gray-White}" Spacing="0">
+
+                    <!--  Header label for account setting  -->
+                    <Grid BackgroundColor="{DynamicResource Gray-100}">
+                        <Label
+                    Padding="16,0,0,0"
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    BackgroundColor="{DynamicResource Gray-100}"
+                    FontSize="12"
+                    HeightRequest="50"
+                    HorizontalOptions="FillAndExpand"
+                    LineHeight="{OnPlatform Default=-1,
+                                            Android=1.25}"
+                    Text="Product  Details"
+                    TextColor="{DynamicResource Gray-800}"
+                    VerticalOptions="Center"
+                    VerticalTextAlignment="Center"/>
+                        
+                    </Grid>
+                    <border:SfBorder Padding="0" VerticalOptions="Center" IsVisible="{Binding ImageExist}" HorizontalOptions="Center" BorderWidth="1" CornerRadius="5    " HeightRequest="250" WidthRequest="250" >
+                        <Grid >
+                            <ActivityIndicator IsVisible="true" x:Name="activityIndicator" IsRunning="True"  VerticalOptions="Center" HorizontalOptions="Center" Color="#b51700" />
+                            <Image x:Name="MyProductImage"   BackgroundColor="Transparent" Source="" HorizontalOptions="Center" Aspect="AspectFit" HeightRequest="250" WidthRequest="250"/>
+                        </Grid>
+                    </border:SfBorder>
+                    
+                    <!-- Product ID Grid-->
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Margin="20,10,20,5" 
+                              Grid.Column="0"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Product ID" TextColor="{DynamicResource HyperLink}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <controls:BorderlessEntry
+                                IsEnabled="{Binding EnableId}"
+                        Grid.Row="1"
+                        Text="{Binding ThisNewProduct.ProductIdId}"
+                        Keyboard="Numeric"/>
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}"/>
+                        </Grid>
+                        <Grid x:Name="imageGrid" Grid.Column="1">
+                            <!-- button  -->
+                            <buttons:SfButton
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                CornerRadius="20"
+                                Grid.Row="0"
+                                Padding="0"
+                                TextColor="{DynamicResource PrimaryColor}"
+                                BorderWidth="3"
+                                BorderColor="Transparent"
+                                BackgroundColor="White"
+                                FontFamily="{StaticResource Montserrat-SemiBold}"
+                                Text="+ Add Image"
+                                Command="{Binding LoadImageFromCamera}"/>
+
+                        </Grid>
+                    </Grid>
+                    <!-- Product Name-->
+                    <Grid Margin="20,10,20,5"
+                    Grid.Row="2" RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Product Name" TextColor="{DynamicResource HyperLink}" />
+                                    <Span Text="*" TextColor="Red"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <controls:BorderlessEntry
+                        Grid.Row="1"
+                        IsEnabled="{Binding EnableName}"
+                        Text="{Binding ThisNewProduct.productName}"
+                        Keyboard="Text"/>
+                        <BoxView
+                            Grid.Row="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                    </Grid>
+
+                    <!-- Bar Code-->
+                    <Grid Margin="20,10,20,5"
+                    Grid.Row="2" RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Bar Code" TextColor="{DynamicResource HyperLink}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <controls:BorderlessEntry
+                        Grid.Row="1"
+                        IsEnabled="{Binding EnableName}"
+                        Text="{Binding ThisNewProduct.QuantityList}"
+                        Keyboard="Numeric"/>
+                        <BoxView
+                            Grid.Row="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                    </Grid>
+
+                    <!-- Product Description-->
+                    <Grid Margin="20,10,20,5"
+                    Grid.Row="2" RowSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Product Description" TextColor="{DynamicResource HyperLink}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <controls:BorderlessEntry
+                        Grid.Row="1"
+                        Text="{Binding ThisNewProduct.productDesc}"
+                        Keyboard="Text"/>
+                        <BoxView
+                            Grid.Row="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                    </Grid>
+
+                    <!-- Category-->
+                    <Grid Margin="20,10,20,5" IsVisible="{Binding EnableCat}"
+                    Grid.Row="2" RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                            Command="{Binding DisplayCategoriesAsync }" CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
+                        <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Choose Category" TextColor="{DynamicResource HyperLink}" />
+                                    <Span Text="*" TextColor="Red"/>
+                                    <Span Text=" :" TextColor="{DynamicResource HyperLink}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label
+                        Margin="10,0"
+                        FontSize="Medium"
+                            TextColor="Black"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding SelectedCategory}"/>
+                        <BoxView
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                    </Grid>
+
+                    <!-- Sub Category 1-->
+                    <Grid Margin="20,10,20,5" IsVisible="{Binding IsSubCat1Available}"
+                    Grid.Row="2" RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                            Command="{Binding DisplaySubCategory1Async }" CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
+                        <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Sub-Category 1" TextColor="{DynamicResource HyperLink}" />
+                                    <Span Text="*" TextColor="Red"/>
+                                    <Span Text=" :" TextColor="{DynamicResource HyperLink}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label
+                        Margin="10,0"
+                        FontSize="Medium"
+                        Grid.Row="0"
+                            TextColor="Black"
+                        Grid.Column="1"
+                        Text="{Binding SelectedSubCategory1}"/>
+                        <BoxView
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                    </Grid>
+
+                    <!-- Sub-Category 2-->
+                    <Grid Margin="20,10,20,5" IsVisible="{Binding IsSubCat2Available}"
+                    Grid.Row="2" RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer 
+                            Command="{Binding DisplaySubCategory2Async }" CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
+                        <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Sub-Category 2" TextColor="{DynamicResource HyperLink}" />
+                                    <Span Text="*" TextColor="Red"/>
+                                    <Span Text=" :" TextColor="{DynamicResource HyperLink}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label
+                        Margin="10,0"
+                        FontSize="Medium"
+                            TextColor="Black"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Text="{Binding SelectedSubCategory2}"/>
+                        <BoxView
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                    </Grid>
+                    
+                    <!-- MRP and Selling Price Grid-->
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--MRP Grid-->
+                        <Grid Margin="20,10,20,5" 
+                              Grid.Column="0"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="MRP" TextColor="{DynamicResource HyperLink}" />
+                                        <Span Text="*" TextColor="Red"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <syncfusion:SfNumericTextBox
+                                Grid.Row="1"
+                                Value="{Binding ThisNewProduct.mrp }"
+                                MaximumNumberDecimalDigits="2" 
+                                SelectAllOnFocus="True"
+                                BorderColor="White"/>
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                        </Grid>
+
+                        <!-- Selling Price Grid-->
+                        <Grid Margin="20,10,20,5"
+                              Grid.Column="1"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Selling  Price" TextColor="{DynamicResource HyperLink}" />
+                                        <Span Text="*" TextColor="Red"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <syncfusion:SfNumericTextBox
+                                Grid.Row="1" 
+                                Value="{Binding ThisNewProduct.SellingPrice }" 
+                                SelectAllOnFocus="True"
+                                MaximumNumberDecimalDigits="2"/> 
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                        </Grid>
+                    </Grid>
+
+
+
+                    <!-- GST and CESS Grid-->
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--GST Grid-->
+                        <Grid Margin="20,10,20,5" 
+                              Grid.Column="0"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="GST %" TextColor="{DynamicResource HyperLink}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <syncfusion:SfNumericTextBox
+                                Grid.Row="1" 
+                                Value="{Binding ThisNewProduct.GST }" 
+                                FormatString="p" 
+                                AllowNull="True"
+                                PercentDisplayMode="Value" 
+                                SelectAllOnFocus="True"
+                                Maximum="100"/> 
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                        </Grid>
+
+                        <!-- CESS Grid-->
+                        <Grid Margin="20,10,20,5"
+                              Grid.Column="1"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="CESS %" TextColor="{DynamicResource HyperLink}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <syncfusion:SfNumericTextBox
+                                Grid.Row="1" 
+                                Value="{Binding ThisNewProduct.CESS }"
+                                FormatString="p" 
+                                PercentDisplayMode="Value" 
+                                SelectAllOnFocus="True"
+                                AllowNull="True"
+                                Maximum="100"/> 
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- Discount and Discount Percentage Grid-->
+                    <Grid Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Discount Grid-->
+                        <Grid Margin="20,10,20,5" 
+                              Grid.Column="0"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Discount" TextColor="{DynamicResource HyperLink}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <controls:BorderlessEntry
+                                IsEnabled="False"
+                        Grid.Row="1"
+                        Text="{Binding ThisNewProduct.DiscountPrice}"
+                        Keyboard="Numeric"/>
+
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                        </Grid>
+
+                        <!-- Discount Percentage Grid-->
+                        <Grid Margin="20,10,20,5"
+                              Grid.Column="1"
+                              RowSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Label
+                        Grid.Row="0"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Discount %" TextColor="{DynamicResource HyperLink}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <controls:BorderlessEntry
+                        Grid.Row="1"
+                                IsEnabled="False"
+                        Text="{Binding ThisNewProduct.DiscountPercent, StringFormat='{0:0.00}%' }"
+                        Keyboard="Numeric"/>
+                            <BoxView
+                            Grid.Row="2"
+                            Margin="0,5,0,0"
+                            HeightRequest="1"
+                            Style="{StaticResource BoxViewStyle}" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- Is It grid-->
+                    <Grid RowSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Margin="20,10,20,5" 
+                              Grid.Column="0"
+                              RowSpacing="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                        Grid.Column="0"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                        TextColor="{DynamicResource HyperLink}"
+                        Text="Is it avaiable"/>
+                            <!--  Notifications switch  -->
+                            <buttons:SfSwitch VerticalOptions="Center" HorizontalOptions="End"
+                        Grid.Column="1"
+                        Margin="8,0"
+                        IsOn="{Binding ThisNewProduct.AvailabilityStatusBool}"
+                        AllowIndeterminateState="False"
+                        HeightRequest="28"
+                        VisualType="Fluent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="On">
+                                            <VisualState.Setters>
+                                                <Setter Property="SwitchSettings">
+                                                    <Setter.Value>
+                                                        <buttons:FluentSwitchSettings
+                                                    x:TypeArguments="buttons:OnState"
+                                                    ThumbBorderColor="{DynamicResource Gray-200}"
+                                                    ThumbColor="{DynamicResource Gray-White}"
+                                                    TrackBorderColor="{DynamicResource Gray-200}"
+                                                    TrackColor="{DynamicResource PrimaryColor}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Off">
+                                            <VisualState.Setters>
+                                                <Setter Property="SwitchSettings">
+                                                    <Setter.Value>
+                                                        <buttons:FluentSwitchSettings
+                                                    x:TypeArguments="buttons:OffState"
+                                                    ThumbBorderColor="{DynamicResource Gray-200}"
+                                                    ThumbColor="{DynamicResource Gray-White}"
+                                                    TrackBorderColor="{DynamicResource Gray-200}"
+                                                    TrackColor="{DynamicResource Gray-200}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </buttons:SfSwitch>
+                        </Grid>
+
+                        <Grid Margin="20,10,20,5" 
+                              Grid.Column="1"
+                              RowSpacing="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label
+                        Grid.Column="0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        FontAttributes="Bold"
+                        FontSize="10"
+                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                        TextColor="{DynamicResource HyperLink}"
+                        Text="Is it visible"/>
+                            <!--  Notifications switch  -->
+                            <buttons:SfSwitch VerticalOptions="Center" HorizontalOptions="End"
+                        Grid.Column="1"
+                        Margin="8,0"
+                        IsOn="{Binding ThisNewProduct.VisibilityStatusBool}"
+                        AllowIndeterminateState="False"
+                        HeightRequest="28"
+                        VisualType="Fluent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="On">
+                                            <VisualState.Setters>
+                                                <Setter Property="SwitchSettings">
+                                                    <Setter.Value>
+                                                        <buttons:FluentSwitchSettings
+                                                    x:TypeArguments="buttons:OnState"
+                                                    ThumbBorderColor="{DynamicResource Gray-200}"
+                                                    ThumbColor="{DynamicResource Gray-White}"
+                                                    TrackBorderColor="{DynamicResource Gray-200}"
+                                                    TrackColor="{DynamicResource PrimaryColor}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Off">
+                                            <VisualState.Setters>
+                                                <Setter Property="SwitchSettings">
+                                                    <Setter.Value>
+                                                        <buttons:FluentSwitchSettings
+                                                    x:TypeArguments="buttons:OffState"
+                                                    ThumbBorderColor="{DynamicResource Gray-200}"
+                                                    ThumbColor="{DynamicResource Gray-White}"
+                                                    TrackBorderColor="{DynamicResource Gray-200}"
+                                                    TrackColor="{DynamicResource Gray-200}" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </buttons:SfSwitch></Grid>
+                    </Grid>
+                    <border:SfBorder Grid.Row="1" BorderWidth="0" HorizontalOptions="Center" Margin="0,15,0,32" WidthRequest="220" CornerRadius="20" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <gradient:SfGradientView Grid.Row="0"  >
+                                <gradient:SfGradientView.BackgroundBrush>
+                                    <gradient:SfLinearGradientBrush>
+                                        <gradient:SfLinearGradientBrush.GradientStops>
+                                            <gradient:SfGradientStop Color="{DynamicResource PrimaryColor}" Offset="0.0" />
+                                            <gradient:SfGradientStop Color="{DynamicResource PrimaryGradient}" Offset="1.0" />
+                                        </gradient:SfLinearGradientBrush.GradientStops>
+                                    </gradient:SfLinearGradientBrush>
+                                </gradient:SfGradientView.BackgroundBrush>
+                            </gradient:SfGradientView>
+                            <!--  Login button  -->
+                            <buttons:SfButton
+                                        CornerRadius="20"
+                                        Grid.Row="0"
+                                        Padding="0"
+                                        TextColor="{DynamicResource PrimaryColor}"
+                                        BorderWidth="3"
+                                        BorderColor="Transparent"
+                                        BackgroundColor="White"
+                                        FontAttributes="Bold"
+                                        FontFamily="{StaticResource Montserrat-SemiBold}"
+                                        Text="SAVE"
+                                        Command="{Binding ProductCommand}"/>
+                        </Grid>
+                    </border:SfBorder>
+                </StackLayout>
+                <!--Busy Indicator-->
+                <busyindicator:SfBusyIndicator Grid.Row="0"  x:Name="busyindicator" IsBusy="{Binding IsBusy}"
+                                       AnimationType="Cupertino" 
+                                       ViewBoxWidth = "100" 
+                                       ViewBoxHeight="100" VerticalOptions="Center" HorizontalOptions="Center"
+                                       TextColor="#b51700" />
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rg:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"  
+             mc:Ignorable="d"
+             x:Class="PyConsumerApp.Views.Products.UploadImagePopup">
+
+    <rg:PopupPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary Source="Styles.xaml" />
+        </ResourceDictionary>
+    </rg:PopupPage.Resources>
+
+    <rg:PopupPage.Content>
+        <Frame Padding="0" Margin="25" HeightRequest="150" WidthRequest="300" CornerRadius="15" VerticalOptions="Center" HasShadow="True" HorizontalOptions="Center">
+
+            <StackLayout BackgroundColor="White"  Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                <!--Camera Option-->
+                <Grid Margin="40,5" RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding LoadImageFromCamera}" CommandParameter="{Binding .}" />
+                    </Grid.GestureRecognizers>
+                    <Image Source="cam.png" Grid.Row="0" HeightRequest="50" WidthRequest="50"  />
+                    <Label Text="Camera" HorizontalOptions="Center" VerticalOptions="Start" Grid.Row="1"/>
+                </Grid>
+
+                <!--Media Option-->
+                <Grid Margin="40,5" RowSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding UploadPhotoFromMedia}" CommandParameter="{Binding .}" />
+                    </Grid.GestureRecognizers>
+                    <Image Source="media.png" Grid.Row="0" HeightRequest="50" WidthRequest="50"  />
+                    <Label Text="Gallery" HorizontalOptions="Center" VerticalOptions="Start" Grid.Row="1"/>
+                </Grid>
+            </StackLayout>
+        </Frame>
+    </rg:PopupPage.Content>
+</rg:PopupPage>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:theEditor="clr-namespace:Syncfusion.SfImageEditor.XForms;assembly=Syncfusion.SfImageEditor.XForms"
+             mc:Ignorable="d"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="PyConsumerApp.Views.Detail.DisplayImagePage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content >
+        <Grid BackgroundColor="Black">
+            <!--  Title View  -->
+            <theEditor:SfImageEditor  x:Name="ImageCropper" BackgroundColor="DarkGray">
+            </theEditor:SfImageEditor>
+            <buttons:SfButton 
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{StaticResource Close}" BackgroundColor="Gray" TextColor="White" CornerRadius="0,0,25,0" Opacity="0.5" HeightRequest="50" WidthRequest="50" Clicked="backButton_Clicked" HorizontalOptions="Start" VerticalOptions="Start"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rg:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rg="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"  
+             mc:Ignorable="d"
+             x:Class="PyConsumerApp.Views.Products.MenuPopup">
+
+    <rg:PopupPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary Source="Styles.xaml" />
+        </ResourceDictionary>
+    </rg:PopupPage.Resources>
+    <rg:PopupPage.Content>
+        <Frame HorizontalOptions="End" Margin="0,50,5,0" HeightRequest="170" Padding="15,10,15,10" VerticalOptions="Start" CornerRadius="10">
+            <StackLayout VerticalOptions="Center" Spacing="10" >
+
+                <BoxView HeightRequest="1" Margin="0,5" BackgroundColor="WhiteSmoke" />
+                <Label Grid.Column="1" 
+                       FontSize="15"
+                    FontFamily="{StaticResource Montserrat-Medium}"
+                       Text="Add New Category" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer  Command="{Binding OpenAddCategoryPopupCommand}" CommandParameter="{Binding .}" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <BoxView HeightRequest="1" Margin="0,5" BackgroundColor="WhiteSmoke" />
+                <Label Grid.Column="1" 
+                    FontFamily="{StaticResource Montserrat-Medium}"
+                       FontSize="15"
+                       Text="Update Existing Product" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenSearchPageCommand}" CommandParameter="{Binding .}" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <BoxView HeightRequest="1" Margin="0,3" BackgroundColor="WhiteSmoke" />
+                <Label Grid.Column="1" 
+                    FontFamily="{StaticResource Montserrat-Medium}"
+                       FontSize="15"
+                       Text="Reset Form" >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ResetFormCommand}" CommandParameter="{Binding .}" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <BoxView HeightRequest="1" Margin="0,3" BackgroundColor="WhiteSmoke" />
+            </StackLayout>
+        </Frame>
+    </rg:PopupPage.Content>
+</rg:PopupPage>
